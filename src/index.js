@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {  legacy_createStore as createStore, compose, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk'
+import reducer from './utility'
+import { BrowserRouter } from 'react-router-dom';
+import './config/axios';
+
+const store = createStore(reducer,compose(applyMiddleware(thunk)))
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
+  <React.StrictMode>       
+      <Suspense fallback={<div>Loading...</div>}>
+        <BrowserRouter>
+          <Provider store={store}>
+          <App />
+          </Provider>
+        </BrowserRouter>
+      </Suspense>
   </React.StrictMode>
 );
 
